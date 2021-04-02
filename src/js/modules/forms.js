@@ -1,26 +1,18 @@
-function forms(){
-    const forms = document.querySelectorAll('form');
-const message = {
-   loading: 'img/form/spinner.svg',
-   success: 'Спасибо! Скоро мы с вами свяжемся',
-   failure: 'Что-то пошло не так...'
+import {closeModal, openModal} from './modals';
+import {postData} from '../services/services';
+
+function forms(formSelector,modalTimerId){
+
+    const forms = document.querySelectorAll(formSelector);
+    const message = {
+        loading: 'img/form/spinner.svg',
+        success: 'Спасибо! Скоро мы с вами свяжемся',
+        failure: 'Что-то пошло не так...'
 };
 
 forms.forEach(item => {
    bindPostData(item);
 });
-
-const postData = async (url, data) => {
-   let res = await fetch(url, {
-       method: "POST",
-       headers: {
-           'Content-Type': 'application/json'
-       },
-       body: data
-   });
-
-   return await res.json();
-};
 
 async function getResource(url) {
    let res = await fetch(url);
@@ -65,7 +57,7 @@ function showThanksModal(message) {
    const prevModalDialog = document.querySelector('.modal__dialog');
 
    prevModalDialog.classList.add('hide');
-   openModal();
+   openModal('.modal', modalTimerId);
 
    const thanksModal = document.createElement('div');
    thanksModal.classList.add('modal__dialog');
@@ -80,9 +72,9 @@ function showThanksModal(message) {
        thanksModal.remove();
        prevModalDialog.classList.add('show');
        prevModalDialog.classList.remove('hide');
-       closeModal();
+       closeModal('.modal');
    }, 4000);
 }
 }
 
-module.exports = forms;
+export default forms;
